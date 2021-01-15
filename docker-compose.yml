@@ -1,0 +1,11 @@
+version: '3'
+
+services:
+  bot:
+    build: .
+    environment:
+      - TELEGRAM_API_TOKEN=${TELEGRAM_API_TOKEN}
+    image: thelebster/dummy-telegram-bot
+    hostname: dummy-telegram-bot
+    container_name: dummy-telegram-bot
+    restart: always
