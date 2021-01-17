@@ -10,6 +10,12 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 logger = logging.getLogger(__name__)
 
 TELEGRAM_API_TOKEN = os.getenv('TELEGRAM_API_TOKEN')
+BOT_RUN_MODE = os.getenv('BOT_RUN_MODE', 'polling')
+
+# Used within `webhook` mode.
+WEBHOOK_HOST = os.getenv('WEBHOOK_HOST', '127.0.0.1')
+WEBHOOK_PORT = int(os.getenv('WEBHOOK_PORT', os.getenv('PORT', 80)))
+WEBHOOK_URL = os.getenv('WEBHOOK_URL', 'http:/%s:%s/' % (WEBHOOK_HOST, WEBHOOK_PORT))
 
 
 # Define a few command handlers. These usually take the two arguments update and
@@ -47,7 +53,11 @@ def main():
     dispatcher.add_handler(MessageHandler(Filters.text & ~Filters.command, echo))
 
     # Start the Bot
-    updater.start_polling()
+    if BOT_RUN_MODE == 'webhook':
+        updater.start_webhook(listen=WEBHOOK_HOST, port=WEBHOOK_PORT, url_path=TELEGRAM_API_TOKEN)
+        updater.bot.set_webhook(WEBHOOK_URL + TELEGRAM_API_TOKEN)
+    else:
+        updater.start_polling()
 
     # Run the bot until you press Ctrl-C or the process receives SIGINT,
     # SIGTERM or SIGABRT. This should be used most of the time, since
