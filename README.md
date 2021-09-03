@@ -23,3 +23,24 @@ heroku config:set WEBHOOK_HOST=0.0.0.0
 heroku config:set WEBHOOK_URL=https://appname.herokuapp.com/
 ```
 5. Deploy changes to Heroku using the following command `git subtree push --prefix dummy_bot heroku master`.
+
+### Update python-telegram-bot (pipenv)
+
+```
+cd dummy_bot
+pipenv update python-telegram-bot
+```
+
+or
+
+```
+cd dummy_bot
+/usr/local/opt/pipenv/bin/pipenv update python-telegram-bot
+```
+
+### Update virtual env (pip)
+
+```
+cd dummy_bot
+pip install python-telegram-bot --upgrade
+```
